@@ -19,9 +19,10 @@ class AppointmentFactory extends Factory
         return [
             'user_id'    => null,
             'doctor_id'  => null,
-            'day'        => $this->faker->date(), 
+            'date'        => $this->faker->date(),
             'start_time' => $this->faker->time('H:i:s'),
             'end_time'   => $this->faker->time('H:i:s'),
+            'status'     => $this->faker->randomElement(['pending', 'accepted', 'rejected']),
         ];
     }
 }
