@@ -8,15 +8,13 @@ interface UserServiceInterface
 
     public function getUserById(string $id);
 
-    //public function getUserByEmail(string $email);
+    public function createUser(array $data);
 
-    //public function createUser(array $data);
+    public function updateUser(string $id, array $data);
 
-    //public function updateUser(string $id, array $data);
+    public function deleteUser(string $id);
 
-    //public function deleteUser(string $id);
+    public function advancedSearch(array $data);
 
-    //public function convertUserToDoctor(string $id);
+    public function convertUserToDoctor(string $id);
 }
-
-

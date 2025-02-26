@@ -1,6 +1,14 @@
 <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Users List') }}
+        </h2>
+    </x-slot>
+
     <div class="container mt-5">
-        <h1 class="mb-4">Users List</h1>
+        <div class="container my-4">
+            <a href="{{ route('users.create') }}" class="btn btn-primary btn-md">Add new schedule</a>
+        </div>
         <table class="table table-bordered">
             <thead class="thead-dark">
                 <tr>
@@ -26,6 +34,13 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
+                            @if ($user->role == 'patient')
+                            <form action="{{ route('users.make-doctor', $user->id) }}" method="PUT" style="display:inline-block;">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-warning btn-sm">Make Doctor</button>
+                            </form>
+                        @endif
                         </td>
                     </tr>
                 @endforeach
