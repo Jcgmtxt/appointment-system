@@ -15,7 +15,7 @@
                 {{ __('New Schedule') }}
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('schedule.store') }}">
+                <form method="POST" action="{{ route('schedules.store') }}">
                     @csrf
 
                     <div class="form-group mb-3">
@@ -59,7 +59,7 @@
                 </form>
             </div>
         </div>
-        <a href="{{ route('schedule.index') }}" class="btn btn-secondary mt-3">
+        <a href="{{ route('schedules.index') }}" class="btn btn-secondary mt-3">
             {{ __('Back to Schedule') }}
         </a>
     </div>

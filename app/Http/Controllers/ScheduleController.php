@@ -23,6 +23,7 @@ class ScheduleController extends Controller
     public function index()
     {
         $schedules = $this->scheduleService->getAllSchedules();
+        
         return view('schedules.index', compact('schedules'));
     }
 

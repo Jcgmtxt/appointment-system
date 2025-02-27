@@ -21,8 +21,8 @@ Route::middleware([
     })->name('dashboard');
     Route::resource('users', UserController::class);
     Route::post('users/make-doctor/{id}', [UserController::class, 'convertUserToDoctor'])->name('users.make-doctor');
-    Route::resource('doctor', DoctorController::class);
-    Route::resource('schedule', ScheduleController::class);
-    Route::resource('appointment', AppointmentController::class);
+    Route::resource('doctors', DoctorController::class);
+    Route::resource('schedules', ScheduleController::class);
+    Route::resource('appointments', AppointmentController::class);
     Route::get('doctors/{id}/schedules', [DoctorController::class, 'schedules'])->name('doctors.schedules');
 });

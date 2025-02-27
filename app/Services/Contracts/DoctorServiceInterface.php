@@ -10,6 +10,10 @@ interface DoctorServiceInterface
 
     public function getDoctorById(string $id);
 
+    public function getUsersWithDoctorRole();
+
+    public function getRegularUsers();
+
     public function createDoctor(array $data);
 
     public function updateDoctor(string $id, array $data);

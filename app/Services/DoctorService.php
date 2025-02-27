@@ -2,11 +2,21 @@
 
 namespace App\Services;
 
+use App\Services\Contracts\UserServiceInterface;
+use App\Models\User;
 use App\Models\Doctor;
 use App\Services\Contracts\DoctorServiceInterface;
 
 class DoctorService implements DoctorServiceInterface
 {
+
+    protected $userService;
+
+    public function __construct(UserServiceInterface $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function getDoctorByUserId(string $id)
     {
         return Doctor::where('user_id', $id)->first();
@@ -22,15 +32,42 @@ class DoctorService implements DoctorServiceInterface
         return Doctor::find($id);
     }
 
+    public function getUsersWithDoctorRole()
+    {
+        return User::where('role', 'doctor')
+        ->whereDoesntHave('doctor')
+        ->get();
+    }
+
+    public function getRegularUsers()
+    {
+        return User::where('role', '!=', 'doctor')
+        ->whereDoesntHave('doctor')
+        ->get();
+    }
+
     public function createDoctor(array $data)
     {
-        return Doctor::create($data);
+        $user = $this->userService->getUserById($data['user_id']);
+
+        if ($user->role != 'doctor' && isset($data['convert_to_doctor'])) {
+            $this->userService->convertUserToDoctor($data['user_id']);
+        }
+
+        return Doctor::create([
+            'user_id' => $data['user_id'],
+            'specialty' => $data['specialty'],
+            'location' => $data['location'],
+        ]);
     }
 
     public function updateDoctor(string $id, array $data)
     {
         $doctor = Doctor::find($id);
-        $doctor->update($data);
+        $doctor->update([
+            'specialty' => $data['specialty'],
+            'location' => $data['location'],
+        ]);
         return $doctor;
     }
 

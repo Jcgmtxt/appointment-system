@@ -2,29 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Contracts\DoctorServiceInterface;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    protected $doctorService;
+
+    public function __construct(DoctorServiceInterface $doctorService)
+    {
+        $this->doctorService = $doctorService;
+    }
+
     public function index()
     {
-        //
+        $doctors = $this->doctorService->getAllDoctors();
+
+        return view('doctors.index', compact('doctors'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $doctorRoleUsers = $this->doctorService->getUsersWithDoctorRole();
+
+        $regularUsers = $this->doctorService->getRegularUsers();
+
+        return view('doctors.create', compact('doctorRoleUsers', 'regularUsers'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         //

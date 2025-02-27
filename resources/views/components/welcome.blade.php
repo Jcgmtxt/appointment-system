@@ -15,8 +15,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Schedulea</h5>
                     <p class="card-text">Book an appointment with a doctor.</p>
-                    <a href="{{ route('schedule.index') }}" class="btn btn-primary">Schedule Now</a>
-                    <a href="{{ route('schedule.create') }}" class="btn btn-primary">Create Schedule</a>
+                    <a href="{{ route('schedules.index') }}" class="btn btn-primary">Schedule Now</a>
+                    <a href="{{ route('schedules.create') }}" class="btn btn-primary">Create Schedule</a>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <h5 class="card-title">View Doctors</h5>
                     <p class="card-text">Browse the list of available doctors.</p>
-                    <a href="{{ route('doctor.index') }}" class="btn btn-primary">View Doctors</a>
+                    <a href="{{ route('doctors.index') }}" class="btn btn-primary">View Doctors</a>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Check Appointment Availability</h5>
                     <p class="card-text">See available slots for appointments.</p>
-                    <a href="{{ route('appointment.index') }}" class="btn btn-primary">Check Availability</a>
+                    <a href="{{ route('appointments.index') }}" class="btn btn-primary">Check Availability</a>
                 </div>
             </div>
         </div>

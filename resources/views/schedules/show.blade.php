@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="text-right mt-3">
-            <a href="{{ route('schedule.create') }}" class="btn btn-primary btn-sm">Create New Schedule</a>
+            <a href="{{ route('schedules.create') }}" class="btn btn-primary btn-sm">Create New Schedule</a>
         </div>
     </div>
 </x-app-layout>

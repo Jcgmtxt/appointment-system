@@ -7,7 +7,7 @@
 
     <div class="container my-4">
         <div class="container my-4">
-            <a href="{{ route('schedule.create') }}" class="btn btn-primary btn-md">Create new user</a>
+            <a href="{{ route('schedules.create') }}" class="btn btn-primary btn-md">Create new user</a>
         </div>
         <table class="table table-bordered">
             <thead class="thead-dark">
@@ -55,9 +55,9 @@
                         <td>{{ $schedule->start_time }}</td>
                         <td>{{ $schedule->end_time }}</td>
                         <td>
-                            <a href="{{ route('schedule.show', $schedule->id) }}" class="btn btn-info btn-sm">View</a>
-                            <a href="{{ route('schedule.edit', $schedule->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('schedule.destroy', $schedule->id) }}" method="POST" style="display:inline-block;">
+                            <a href="{{ route('schedules.show', $schedule->id) }}" class="btn btn-info btn-sm">View</a>
+                            <a href="{{ route('schedules.edit', $schedule->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('schedules.destroy', $schedule->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>                                </form>
