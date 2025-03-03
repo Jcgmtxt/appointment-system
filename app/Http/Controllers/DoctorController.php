@@ -70,14 +70,14 @@ class DoctorController extends Controller
     {
         try {
             $validation = $request->validate([
-                'user_id'=>'required|exists:users,id',
-                'specialization'  => 'required|string|max:255',
-                'license_number'  => 'required|string|max:255',
+                'user_id' => 'required|exists:users,id',
+                'specialization' => 'required|string|max:255',
+                'license_number' => 'required|string|max:255',
             ]);
 
             $doctor = $this->doctorService->updateDoctor($id, $validation);
-
             return redirect()->route('doctors.show', $doctor)->with('success', 'Doctor updated successfully.');
+
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

@@ -64,13 +64,13 @@ class DoctorService implements DoctorServiceInterface
             'license_number' => $data['license_number'],
         ]);
     }
-    
+
     public function updateDoctor(string $id, array $data)
     {
         $doctor = Doctor::find($id);
         $doctor->update([
-            'specialty' => $data['specialty'],
-            'location' => $data['location'],
+            'specialization' => $data['specialization'],
+            'license_number' => $data['license_number'],
         ]);
         return $doctor;
     }
