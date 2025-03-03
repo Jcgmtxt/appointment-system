@@ -52,12 +52,10 @@ class DoctorController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $doctor = $this->doctorService->getDoctorById($id);
+        return view('doctors.show', compact('doctor'));
     }
 
     /**
