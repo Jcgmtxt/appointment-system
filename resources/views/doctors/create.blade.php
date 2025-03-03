@@ -17,93 +17,39 @@
                 {{ __('New Doctor') }}
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('doctor.store') }}">
+                <form method="POST" action="{{ route('doctors.store') }}">
                     @csrf
 
-                    <div class="card mb-4">
-                        <div class="card-header bg-light">
-                            {{ __('Select User') }}
-                        </div>
-                        <div class="card-body">
-                            <ul class="nav nav-tabs" id="userTabs" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="doctor-role-tab" data-bs-toggle="tab" data-bs-target="#doctor-role" type="button" role="tab" aria-controls="doctor-role" aria-selected="true">
-                                        {{ __('Users with Doctor Role') }}
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="regular-user-tab" data-bs-toggle="tab" data-bs-target="#regular-user" type="button" role="tab" aria-controls="regular-user" aria-selected="false">
-                                        {{ __('Regular Users') }}
-                                    </button>
-                                </li>
-                            </ul>
+                    <div class="form-group mb-3">
+                        <label for="user_id">{{ __('Users not registered in the Doctors table but with the doctors role') }}</label>
+                        <select name="user_id" id="select_doctor" class="form-control" onchange="toggleSelects('select_doctor', 'select_user')">
+                            <option value="">{{ __('Select Doctor') }}</option>
+                            @foreach($usersDoctorRolewithoutRelacionDoctorTable as $user)
+                                <option value="{{ $user->id }}">
+                                    {{ $user->id }} - {{ $user->name }}
+                                </option>
+                            @endforeach
+                        </select>
 
-                            <div class="tab-content pt-3" id="userTabContent">
-                                <div class="tab-pane fade show active" id="doctor-role" role="tabpanel" aria-labelledby="doctor-role-tab">
-                                    <div class="form-group mb-3">
-                                        <label for="doctor_role_user_id">{{ __('Users with Doctor Role') }}</label>
-                                        <select name="user_id" id="doctor_role_user_id" class="form-control doctor-user-select">
-                                            <option value="">{{ __('Select a User') }}</option>
-                                            @foreach($doctorRoleUsers as $user)
-                                                <option value="{{ $user->id }}">
-                                                    {{ $user->name }} ({{ $user->email }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @if(count($doctorRoleUsers) === 0)
-                                            <small class="text-muted">{{ __('No users with doctor role available.') }}</small>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="tab-pane fade" id="regular-user" role="tabpanel" aria-labelledby="regular-user-tab">
-                                    <div class="form-group mb-3">
-                                        <label for="regular_user_id">{{ __('Regular Users') }}</label>
-                                        <select name="user_id" id="regular_user_id" class="form-control doctor-user-select">
-                                            <option value="">{{ __('Select a User') }}</option>
-                                            @foreach($regularUsers as $user)
-                                                <option value="{{ $user->id }}">
-                                                    {{ $user->name }} ({{ $user->email }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @if(count($regularUsers) === 0)
-                                            <small class="text-muted">{{ __('No regular users available.') }}</small>
-                                        @endif
-                                    </div>
-
-                                    <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" name="convert_to_doctor" id="convert_to_doctor" value="1" checked>
-                                        <label class="form-check-label" for="convert_to_doctor">
-                                            {{ __('Convert this user to doctor role') }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <label for="user_id">{{ __('Select the user you want to convert into a doctor') }}</label>
+                        <select name="user_id" id="select_user" class="form-control" onchange="toggleSelects('select_doctor', 'select_user')">
+                            <option value="">{{ __('Select User') }}</option>
+                            @foreach ($regularUsers as $regularUser)
+                                <option value="{{ $regularUser->user_id }}">
+                                    {{ $regularUser->id }} - {{$regularUser->name}}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
-                    <div class="card">
-                        <div class="card-header bg-light">
-                            {{ __('Doctor Information') }}
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group mb-3">
-                                <label for="specialization">{{ __('Specialization') }}</label>
-                                <input type="text" name="specialization" id="specialization" class="form-control" required>
-                                @error('specialization')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
+                    <div class="form-group mb-3">
+                        <label for="specialization">{{ __('Specialization') }}</label>
+                        <input type="text" name="specialization" id="specialization" class="form-control" required>
+                    </div>
 
-                            <div class="form-group mb-3">
-                                <label for="license_number">{{ __('License Number') }}</label>
-                                <input type="text" name="license_number" id="license_number" class="form-control" required>
-                                @error('license_number')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
+                    <div class="form-group mb-3">
+                        <label for="license_number">{{ __('License Number') }}</label>
+                        <input type="text" name="license_number" id="license_number" class="form-control" required>
                     </div>
 
                     <button type="submit" class="btn btn-primary mt-3">
@@ -113,44 +59,24 @@
             </div>
         </div>
 
-        <a href="{{ route('doctor.index') }}" class="btn btn-secondary mt-3">
+        <a href="{{ route('doctors.index') }}" class="btn btn-secondary mt-3">
             {{ __('Back to Doctors') }}
         </a>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Referencias a los elementos
-            const doctorRoleTab = document.getElementById('doctor-role-tab');
-            const regularUserTab = document.getElementById('regular-user-tab');
-            const doctorRoleSelect = document.getElementById('doctor_role_user_id');
-            const regularUserSelect = document.getElementById('regular_user_id');
-            const userSelects = document.querySelectorAll('.doctor-user-select');
+        function toggleSelects( select_user, select_doctor){
 
-            // Función para deseleccionar el otro selector cuando se selecciona uno
-            userSelects.forEach(select => {
-                select.addEventListener('change', function() {
-                    if (this.value !== '') {
-                        // Deseleccionar los otros selectores
-                        userSelects.forEach(otherSelect => {
-                            if (otherSelect !== this) {
-                                otherSelect.value = '';
-                            }
-                        });
-                    }
-                });
-            });
+            const selected = document.getElementById(select_user);
+            const other = document.getElementById(select_doctor);
 
-            // Cambio entre pestañas
-            doctorRoleTab.addEventListener('click', function() {
-                // Limpiar el selector de usuarios regulares cuando se cambia a esta pestaña
-                regularUserSelect.value = '';
-            });
+            if (selected.value !== "") {
+                other.disabled = true;
+            } else {
+                other.disabled = false;
+            }
 
-            regularUserTab.addEventListener('click', function() {
-                // Limpiar el selector de usuarios con rol de doctor cuando se cambia a esta pestaña
-                doctorRoleSelect.value = '';
-            });
-        });
+        }
     </script>
+
 </x-app-layout>

@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="container mt-5">
+    <div class="container my-4">
         <div class="card">
             <div class="card-header">
                 <h2>User Details</h2>
@@ -47,7 +47,6 @@
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger mt-3">Delete User</button>
                 </form>
-                
             </div>
         </div>
     </div>

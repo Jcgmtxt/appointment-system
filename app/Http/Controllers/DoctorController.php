@@ -24,16 +24,32 @@ class DoctorController extends Controller
 
     public function create()
     {
-        $doctorRoleUsers = $this->doctorService->getUsersWithDoctorRole();
+        $usersDoctorRolewithoutRelacionDoctorTable = $this->doctorService->getUsersWithDoctorRole();
 
         $regularUsers = $this->doctorService->getRegularUsers();
 
-        return view('doctors.create', compact('doctorRoleUsers', 'regularUsers'));
+        return view('doctors.create', compact('usersDoctorRolewithoutRelacionDoctorTable', 'regularUsers'));
     }
 
     public function store(Request $request)
     {
-        //
+        try {
+            $data = $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'specialization' => 'required|string|max:255',
+                'license_number' => 'required|string|max:255',
+            ]);
+
+            $this->doctorService->createDoctor($data);
+
+            session()->flash('success', 'Doctor created successfully');
+
+            return redirect()->route('doctors.index');
+
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**

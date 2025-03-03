@@ -50,17 +50,21 @@ class DoctorService implements DoctorServiceInterface
     {
         $user = $this->userService->getUserById($data['user_id']);
 
+        if ($user == null) {
+            throw new \Exception('User not found');
+        }
+
         if ($user->role != 'doctor' && isset($data['convert_to_doctor'])) {
             $this->userService->convertUserToDoctor($data['user_id']);
         }
 
         return Doctor::create([
-            'user_id' => $data['user_id'],
-            'specialty' => $data['specialty'],
-            'location' => $data['location'],
+            'user_id' => $user->id,
+            'specialization' => $data['specialization'],
+            'license_number' => $data['license_number'],
         ]);
     }
-
+    
     public function updateDoctor(string $id, array $data)
     {
         $doctor = Doctor::find($id);

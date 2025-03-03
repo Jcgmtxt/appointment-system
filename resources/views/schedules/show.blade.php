@@ -1,53 +1,68 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Schedule Details') }}
-        </h2>
-    </x-slot>
-
     <div class="container my-4">
         <div class="card">
             <div class="card-header">
-                Schedule Details for Dr. {{ $schedule->doctor->user->name }}
+                <h2>Schedule Details</h2>
             </div>
             <div class="card-body">
-                <p><strong>Doctor ID:</strong> {{ $schedule->doctor_id }}</p>
-                <p><strong>Doctor Name:</strong> {{ $schedule->doctor->user->name }}</p>
-                <p>
-                    <strong>Day:</strong>
-                    @switch($schedule->day)
-                        @case('0')
-                            Monday
-                            @break
-                        @case('1')
-                            Tuesday
-                            @break
-                        @case('2')
-                            Wednesday
-                            @break
-                        @case('3')
-                            Thursday
-                            @break
-                        @case('4')
-                            Friday
-                            @break
-                        @case('5')
-                            Saturday
-                            @break
-                        @case('6')
-                            Sunday
-                            @break
-                        @default
-                            Invalid day
-                    @endswitch
-                </p>
-                <p><strong>Start Time:</strong> {{ $schedule->start_time }}</p>
-                <p><strong>End Time:</strong> {{ $schedule->end_time }}</p>
-
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>Doctor ID</th>
+                            <td>{{ $schedule->doctor_id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Doctor Name</th>
+                            <td>{{ $schedule->doctor->user->name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Day</th>
+                            <td>
+                                @switch($schedule->day)
+                                    @case('0')
+                                        Monday
+                                        @break
+                                    @case('1')
+                                        Tuesday
+                                        @break
+                                    @case('2')
+                                        Wednesday
+                                        @break
+                                    @case('3')
+                                        Thursday
+                                        @break
+                                    @case('4')
+                                        Friday
+                                        @break
+                                    @case('5')
+                                        Saturday
+                                        @break
+                                    @case('6')
+                                        Sunday
+                                        @break
+                                    @default
+                                        Invalid day
+                                @endswitch
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Start Time</th>
+                            <td>{{ $schedule->start_time }}</td>
+                        </tr>
+                        <tr>
+                            <th>End Time</th>
+                            <td>{{ $schedule->end_time }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="{{ route('schedules.index') }}" class="btn btn-secondary mt-3">Back to Schedules List</a>
+                <a href="{{ route('schedules.edit', $schedule->id) }}" class="btn btn-warning mt-3">Edit Schedule</a>
+                <form action="{{ route('schedules.destroy', $schedule->id) }}" method="POST" style="display:inline-block;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger mt-3">Delete Schedule</button>
+                </form>
             </div>
-        </div>
-        <div class="text-right mt-3">
-            <a href="{{ route('schedules.create') }}" class="btn btn-primary btn-sm">Create New Schedule</a>
         </div>
     </div>
 </x-app-layout>
