@@ -23,7 +23,7 @@ class ScheduleController extends Controller
     public function index()
     {
         $schedules = $this->scheduleService->getAllSchedules();
-        
+
         return view('schedules.index', compact('schedules'));
     }
 
@@ -84,7 +84,6 @@ class ScheduleController extends Controller
             return redirect()->route('schedules.index')->with('success', 'Schedule updated successfully');
 
         } catch (\Exception $e) {
-
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
@@ -93,9 +92,9 @@ class ScheduleController extends Controller
     {
         try {
             $this->scheduleService->deleteSchedule($id);
-            return redirect()->route('schedules.index')->with('success', 'Horario eliminado con éxito.');
+            return redirect()->route('schedules.index')->with('success', 'Schedule successfully deleted.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Error al eliminar el horario: ' . $e->getMessage()]);
+            return back()->withErrors(['error' => 'Error deleting schedule: ' . $e->getMessage()]);
         }
     }
 }

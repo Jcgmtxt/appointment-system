@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Services\Contracts\DoctorServiceInterface;
 use Illuminate\Http\Request;
 
@@ -58,27 +59,37 @@ class DoctorController extends Controller
         return view('doctors.show', compact('doctor'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $doctor = $this->doctorService->getDoctorById($id);
+
+        return view('doctors.edit', compact('doctor'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $validation = $request->validate([
+                'user_id'=>'required|exists:users,id',
+                'specialization'  => 'required|string|max:255',
+                'license_number'  => 'required|string|max:255',
+            ]);
+
+            $doctor = $this->doctorService->updateDoctor($id, $validation);
+
+            return redirect()->route('doctors.show', $doctor)->with('success', 'Doctor updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        try{
+            $this->doctorService->deleteDoctor($id);
+            return redirect()->route('doctor.index')->with('success', 'Doctor successfully deleted.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Error deleting schedule: ' . $e->getMessage()]);
+        }
     }
 }
