@@ -74,14 +74,18 @@ class ScheduleController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $data = $request->validate([
+            $validation = $request->validate([
+                'doctor_id' => 'required|exists:doctors,id',
                 'day' => 'required|in:0,1,2,3,4,5,6',
                 'start_time' => 'required|date_format:H:i',
                 'end_time' => 'required|date_format:H:i|after:start_time',
             ]);
 
-            $this->scheduleService->updateSchedule($id, $data);
-            return redirect()->route('schedules.index')->with('success', 'Schedule updated successfully');
+            $validation['start_time'] = $validation['start_time'] . ':00';
+            $validation['end_time']   = $validation['end_time'] . ':00';
+
+            $schedule = $this->scheduleService->updateSchedule($id, $validation);
+            return redirect()->route('schedules.show', $schedule)->with('success', 'Schedule updated successfully');
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());

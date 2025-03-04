@@ -73,6 +73,4 @@ class ScheduleService implements ScheduleServiceInterface
         $schedule = $this->getScheduleById($id);
         $schedule->delete();
     }
-
-
 }

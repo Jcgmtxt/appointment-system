@@ -16,6 +16,16 @@ class Schedule extends Model
         'doctor_id',
     ];
 
+    public function setStartTimeAttribute($value)
+    {
+        $this->attributes['start_time'] = date('H:i', strtotime($value));
+    }
+
+    public function setEndTimeAttribute($value)
+    {
+        $this->attributes['end_time'] = date('H:i', strtotime($value));
+    }
+
     public function doctor()
     {
         return $this->belongsTo(Doctor::class);
