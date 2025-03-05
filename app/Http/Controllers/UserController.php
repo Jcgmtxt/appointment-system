@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Contracts\DoctorServiceInterface;
 use App\Services\Contracts\UserServiceInterface;
+use Exception;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     protected $userService;
 
-    protected $doctorService;
-
-    public function __construct(
-        UserServiceInterface $userService,
-        DoctorServiceInterface $doctorService)
+    public function __construct(UserServiceInterface $userService,)
     {
         $this->userService = $userService;
-        $this->doctorService = $doctorService;
     }
 
 
@@ -47,19 +42,15 @@ class UserController extends Controller
 
                 $data['password'] = bcrypt($data['password']);
 
-                $this->userService->createUser($data);
+                $user = $this->userService->createUser($data);
 
-                return redirect()->route('users.index')->with('success', 'User created successfully');
+                return redirect()->route('users.show', $user)->with('success', 'User created successfully');
 
         } catch (\Exception $e) {
-
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         try {
@@ -69,43 +60,44 @@ class UserController extends Controller
                 throw new \Exception('User not found');
             }
 
-            if ($user->role === 'doctor') {
-
-                $dataDoctor = $this->doctorService->getDoctorByUserId($id);
-
-                return view('doctors.show', compact('user', 'dataDoctor'));
-            }
-
-
-
             return view('users.show', compact('user'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-
+        $user = $this->userService->getUserById($id);
+        return view('doctors.edit', compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $validation = $request->validate([
+                'name' => 'required|string|regex:/^[\pL\s]+$/u|min:6|max:255',
+                'email' => 'required|email',
+                'role' => 'required|in:admin,doctor,patient',
+                'password' => 'required|string|min:8|confirmed',
+            ]);
+
+            $user = $this->userService->updateUser($id, $validation);
+
+            return redirect()->route('users.show', $user)->with('success', 'User update successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        try {
+            $this->userService->deleteUser($id);
+            return redirect()->route('doctor.index')->with('success', 'User successfully deleted.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Error deleting schedule: ' . $e->getMessage()]);
+        }
     }
 
     public function convertUserToDoctor(string $id)

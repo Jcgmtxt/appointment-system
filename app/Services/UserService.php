@@ -25,6 +25,15 @@ class UserService implements UserServiceInterface
     public function updateUser(string $id, array $data)
     {
         $user = $this->getUserById($id);
+
+        $conflict = User::where('email', $data['email'])
+                    ->where('id', '!=', $id)
+                    ->exists();
+
+        if ($conflict) {
+            throw new \Exception("El correo ya se encuentra en uso.");
+        }
+
         $user->update($data);
 
         return $user;
