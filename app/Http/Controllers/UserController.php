@@ -69,7 +69,7 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = $this->userService->getUserById($id);
-        return view('doctors.edit', compact('user'));
+        return view('users.edit', compact('user'));
     }
 
     public function update(Request $request, string $id)
@@ -79,7 +79,6 @@ class UserController extends Controller
                 'name' => 'required|string|regex:/^[\pL\s]+$/u|min:6|max:255',
                 'email' => 'required|email',
                 'role' => 'required|in:admin,doctor,patient',
-                'password' => 'required|string|min:8|confirmed',
             ]);
 
             $user = $this->userService->updateUser($id, $validation);
@@ -94,7 +93,7 @@ class UserController extends Controller
     {
         try {
             $this->userService->deleteUser($id);
-            return redirect()->route('doctor.index')->with('success', 'User successfully deleted.');
+            return redirect()->route('users.index')->with('success', 'User successfully deleted.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Error deleting schedule: ' . $e->getMessage()]);
         }

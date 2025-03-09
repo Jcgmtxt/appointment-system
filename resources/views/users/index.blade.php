@@ -7,7 +7,7 @@
 
     <div class="container my-4">
         <div class="container my-4">
-            <a href="{{ route('users.create') }}" class="btn btn-primary btn-md">Add new schedule</a>
+            <a href="{{ route('users.create') }}" class="btn btn-primary btn-md">Create User</a>
         </div>
         <table class="table table-bordered">
             <thead class="thead-dark">
